@@ -1,4 +1,4 @@
 coverage
-pytest>=2.8
+pytest
 pytest-cov
 pytest-sugar
