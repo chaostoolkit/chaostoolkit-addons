@@ -151,7 +151,7 @@ class Guardian(threading.local):
         """
         Run the guardian safeguards in their own threads.
 
-        If any probes is not flagged to run in the background (repeatedly 
+        If any probes is not flagged to run in the background (repeatedly
         or not), then this call blocks until all these pre-check safeguards
         are completed.
         """
@@ -172,7 +172,7 @@ class Guardian(threading.local):
                     run_now, experiment=experiment,
                     probe=p, configuration=configuration,
                     secrets=secrets, done=self.now_all_done)
-            
+
             if f is not None:
                 f.add_done_callback(partial(self._log_finished, probe=p))
 
@@ -230,8 +230,8 @@ def after_experiment_control(**kwargs):
 # Internals
 ###############################################################################
 def run_repeatedly(experiment: Experiment, probe: Probe,
-                  configuration: Configuration, secrets: Secrets,
-                  stop_repeating: threading.Event) -> None:
+                   configuration: Configuration, secrets: Secrets,
+                   stop_repeating: threading.Event) -> None:
     wait_for = probe.get("frequency")
     while not stop_repeating.is_set():
         run = execute_activity(
