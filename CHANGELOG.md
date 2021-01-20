@@ -4,6 +4,11 @@
 
 [Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.1.3...HEAD
 
+### Added
+
+-  The `bypass` control to dynamically filter activities that should not be
+   executed
+
 ## [0.1.3][]
 
 [0.1.3]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.1.2...0.1.3
