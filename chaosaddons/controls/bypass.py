@@ -75,6 +75,6 @@ def after_activity_control(context: Activity, target_type: str = None,
     Removes the `dry` property that was previously set
     """
     if target_type and context["type"] == target_type:
-        context["dry"] = True
+        context.pop("dry", None)
     if target_names and context["name"] in target_names:
-        context["dry"] = True
+        context.pop("dry", None)
