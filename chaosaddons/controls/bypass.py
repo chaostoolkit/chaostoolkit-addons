@@ -70,7 +70,7 @@ def before_activity_control(context: Activity, target_type: str = None,
 
 
 def after_activity_control(context: Activity, target_type: str = None,
-                            target_names: List[str] = None):
+                           target_names: List[str] = None):
     """
     Removes the `dry` property that was previously set
     """
