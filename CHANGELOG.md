@@ -12,6 +12,7 @@
 
 -  The `bypass` control to dynamically filter activities that should not be
    executed
+-  The `idle` action/probe to pause experiments without blocking the process
 
 ## [0.1.3][]
 
