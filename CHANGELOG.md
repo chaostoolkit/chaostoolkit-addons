@@ -4,6 +4,10 @@
 
 [Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.1.3...HEAD
 
+### Changed
+
+- Ensure to not replay safeguard with frequency once triggered
+
 ### Added
 
 -  The `bypass` control to dynamically filter activities that should not be

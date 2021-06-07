@@ -238,8 +238,9 @@ def run_repeatedly(experiment: Experiment, probe: Probe,
             experiment=experiment, probe=probe,
             configuration=configuration, secrets=secrets)
         stop_repeating.wait(timeout=wait_for)
-        interrupt_experiment_on_unhealthy_probe(
-            probe, run, configuration, secrets)
+        if not stop_repeating.is_set():
+            interrupt_experiment_on_unhealthy_probe(
+                probe, run, configuration, secrets)
 
 
 def run_soon(experiment: Experiment, probe: Probe,
