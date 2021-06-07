@@ -4,6 +4,10 @@
 
 [Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.2.0...HEAD
 
+### Changed
+
+- Requires Python 3.6+ to match Chaos Toolkit itself
+
 ## [0.2.0][]
 
 [0.2.0]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.1.3...0.2.0

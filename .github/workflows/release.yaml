@@ -8,13 +8,13 @@ on:
 
 jobs:
   release-to-pypi:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
-        python-version: '3.5'
+        python-version: '3.6'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -34,7 +34,7 @@ jobs:
         path: dist/chaostoolkit_addons-*
 
   create-gh-release:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Create Release
         uses: actions/create-release@latest
@@ -47,7 +47,7 @@ jobs:
           prerelease: false
 
   upload-gh-release-assets:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-20.04
     needs:
       - create-gh-release
       - release-to-pypi
@@ -61,6 +61,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/*.whl,dist/*.tar.gz"
-          artifact: ""
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
