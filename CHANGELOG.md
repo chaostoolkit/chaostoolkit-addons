@@ -7,6 +7,11 @@
 ### Changed
 
 - Requires Python 3.6+ to match Chaos Toolkit itself
+- Added a flag to the safeguards control so that it waits for the activity
+  to fail before it interrupts the execution gracefully. This should not
+  requires signals nor threading interruptions and therefore be safer [#5][5]
+
+[5]: https://github.com/chaostoolkit/chaostoolkit-addons/issues/5
 
 ## [0.2.0][]
 
