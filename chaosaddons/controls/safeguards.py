@@ -89,15 +89,16 @@ from typing import List
 
 from logzero import logger
 
-from chaoslib.activity import run_activity
+from chaoslib.activity import ensure_activity_is_valid, run_activity
 from chaoslib.caching import lookup_activity
 from chaoslib.control import controls
-from chaoslib.exceptions import ActivityFailed
+from chaoslib.exceptions import ActivityFailed, ChaosException, \
+    InvalidActivity, InterruptExecution
 from chaoslib.exit import exit_gracefully
-from chaoslib.hypothesis import within_tolerance
+from chaoslib.hypothesis import ensure_hypothesis_tolerance_is_valid, \
+    within_tolerance
 from chaoslib.types import Configuration, \
     Experiment, Probe, Run, Secrets, Settings
-
 
 from .synchronization import experiment_finished
 
@@ -210,6 +211,7 @@ def configure_control(configuration: Configuration = None,
                       secrets: Secrets = None, settings: Settings = None,
                       experiment: Experiment = None,
                       probes: List[Probe] = None) -> None:
+    validate_probes(probes)
     guardian.prepare(probes)
 
 
@@ -334,3 +336,25 @@ def execute_activity(experiment: Experiment, probe: Probe,
         control.with_state(run)
 
     return run
+
+
+def validate_probes(probes: List[Probe]):
+    """
+    Validate all probes part of the safeguard control and ensure they are
+    valid Chaos Toolkit probes or fail the experiment's run.
+    """
+    if not probes:
+        return
+
+    for probe in probes:
+        try:
+            ensure_activity_is_valid(probe)
+
+            if "tolerance" not in probe:
+                raise InvalidActivity(
+                    "safeguard control is invalid as the probe '{}' is missing a "
+                    "tolerance property".format(probe['name']))
+
+            ensure_hypothesis_tolerance_is_valid(probe["tolerance"])
+        except ChaosException as x:
+            raise InterruptExecution(str(x)) from x

@@ -4,6 +4,12 @@
 
 [Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.2.0...HEAD
 
+### Added
+
+- Validate probes in the safeguard control [#7][7]
+
+[7]: https://github.com/chaostoolkit/chaostoolkit-addons/issues/7
+
 ### Changed
 
 - Requires Python 3.6+ to match Chaos Toolkit itself
