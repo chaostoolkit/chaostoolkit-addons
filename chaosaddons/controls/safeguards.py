@@ -352,8 +352,8 @@ def validate_probes(probes: List[Probe]):
 
             if "tolerance" not in probe:
                 raise InvalidActivity(
-                    "safeguard control is invalid as the probe '{}' is missing a "
-                    "tolerance property".format(probe['name']))
+                    "safeguard control is invalid as the probe '{}' is "
+                    "missing a tolerance property".format(probe['name']))
 
             ensure_hypothesis_tolerance_is_valid(probe["tolerance"])
         except ChaosException as x:
