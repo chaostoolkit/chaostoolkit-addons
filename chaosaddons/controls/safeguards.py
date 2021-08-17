@@ -92,12 +92,11 @@ from logzero import logger
 from chaoslib.activity import ensure_activity_is_valid, run_activity
 from chaoslib.caching import lookup_activity
 from chaoslib.control import controls
-from chaoslib.exceptions import ActivityFailed, ChaosException, \
-    InvalidActivity, InterruptExecution
+from chaoslib.exceptions import ActivityFailed, InvalidActivity
 from chaoslib.exit import exit_gracefully
 from chaoslib.hypothesis import ensure_hypothesis_tolerance_is_valid, \
     within_tolerance
-from chaoslib.types import Configuration, \
+from chaoslib.types import Configuration, Control, \
     Experiment, Probe, Run, Secrets, Settings
 
 from .synchronization import experiment_finished
@@ -207,11 +206,15 @@ class Guardian(threading.local):
 guardian = Guardian()
 
 
+def validate_control(control: Control) -> None:
+    probes = control["provider"]["arguments"]
+    validate_probes(probes)
+
+
 def configure_control(configuration: Configuration = None,
                       secrets: Secrets = None, settings: Settings = None,
                       experiment: Experiment = None,
                       probes: List[Probe] = None) -> None:
-    validate_probes(probes)
     guardian.prepare(probes)
 
 
@@ -344,17 +347,19 @@ def validate_probes(probes: List[Probe]):
     valid Chaos Toolkit probes or fail the experiment's run.
     """
     if not probes:
-        return
+        raise InvalidActivity("safeguard control must have at least one probe")
 
     for probe in probes:
-        try:
-            ensure_activity_is_valid(probe)
+        ensure_activity_is_valid(probe)
 
-            if "tolerance" not in probe:
-                raise InvalidActivity(
-                    "safeguard control is invalid as the probe '{}' is "
-                    "missing a tolerance property".format(probe['name']))
+        if probe["type"] != "probe":
+            raise InvalidActivity(
+                "safeguard control '{}' should be of type 'probe' "
+                "not '{}'".format(probe['name'], probe['type']))
 
-            ensure_hypothesis_tolerance_is_valid(probe["tolerance"])
-        except ChaosException as x:
-            raise InterruptExecution(str(x)) from x
+        if "tolerance" not in probe:
+            raise InvalidActivity(
+                "safeguard control is invalid as the probe '{}' is "
+                "missing a tolerance property".format(probe['name']))
+
+        ensure_hypothesis_tolerance_is_valid(probe["tolerance"])

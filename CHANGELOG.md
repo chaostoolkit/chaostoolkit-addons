@@ -6,7 +6,8 @@
 
 ### Added
 
-- Validate probes in the safeguard control [#7][7]
+- Validate probes in the safeguard control [#7][7], using the new
+  `validate_control` capability of the chaostoolkit core
 
 [7]: https://github.com/chaostoolkit/chaostoolkit-addons/issues/7
 
