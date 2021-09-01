@@ -207,7 +207,7 @@ guardian = Guardian()
 
 
 def validate_control(control: Control) -> None:
-    probes = control["provider"]["arguments"]
+    probes = control["provider"].get("arguments", {}).get("probes")
     validate_probes(probes)
 
 
