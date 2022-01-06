@@ -102,7 +102,7 @@ from chaoslib.types import Configuration, Control, \
 from .synchronization import experiment_finished
 
 
-__all__ = ["configure_control", "before_activity_control",
+__all__ = ["configure_control", "before_experiment_control",
            "after_experiment_control", "validate_control"]
 
 
