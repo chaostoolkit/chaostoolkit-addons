@@ -14,7 +14,7 @@
 
 ### Changed
 
-- Requires Python 3.6+ to match Chaos Toolkit itself
+- Requires Python 3.7+ to match Chaos Toolkit itself
 
 ## [0.2.0][]
 
