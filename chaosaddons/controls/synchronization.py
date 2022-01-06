@@ -1,6 +1,6 @@
 import threading
 
-__all__ = ["experiment_finished"]
+__all__ = ["experiment_finished", "after_experiment_control"]
 
 
 experiment_finished = threading.Event()

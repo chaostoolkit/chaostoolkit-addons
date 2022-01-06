@@ -46,6 +46,10 @@ from chaoslib.types import Activity
 from logzero import logger
 
 
+__all__ = ["before_experiment_control", "before_activity_control",
+           "after_activity_control"]
+
+
 def before_experiment_control(target_type: str = None,
                               target_names: List[str] = None, **kwargs):
     if target_type:

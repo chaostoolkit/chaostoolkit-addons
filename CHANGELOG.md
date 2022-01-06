@@ -8,6 +8,7 @@
 
 - Validate probes in the safeguard control [#7][7], using the new
   `validate_control` capability of the chaostoolkit core
+- Export control functions in module variable `__all__`
 
 [7]: https://github.com/chaostoolkit/chaostoolkit-addons/issues/7
 
