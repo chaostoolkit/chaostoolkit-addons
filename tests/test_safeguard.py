@@ -10,17 +10,19 @@ def test_fail_on_invalid_probes():
         "provider": {
             "type": "python",
             "module": "chaosaddons.controls.safeguards",
-            "arguments": [
-                {
-                    "name": "my probe",
-                    "type": "action",  ## should be a probe
-                    "provider": {
-                        "type": "python",
-                        "module": "os.path",
-                        "func": "exists"
+            "arguments": {
+                "probes": [
+                    {
+                        "name": "my probe",
+                        "type": "action",  ## should be a probe
+                        "provider": {
+                            "type": "python",
+                            "module": "os.path",
+                            "func": "exists"
+                        }
                     }
-                }
-            ]
+                ]
+            }
         }
     }
     with pytest.raises(InvalidActivity) as x:
@@ -33,17 +35,19 @@ def test_fail_on_invalid_probes_with_unknown_python_function():
         "provider": {
             "type": "python",
             "module": "chaosaddons.controls.safeguards",
-            "arguments": [
-                {
-                    "name": "my probe",
-                    "type": "probe",
-                    "provider": {
-                        "type": "python",
-                        "module": "os.path",
-                        "func": "whatever"
+            "arguments": {
+                "probes": [
+                    {
+                        "name": "my probe",
+                        "type": "probe",
+                        "provider": {
+                            "type": "python",
+                            "module": "os.path",
+                            "func": "whatever"
+                        }
                     }
-                }
-            ]
+                ]
+            }
         }
     }
     with pytest.raises(InvalidActivity) as x:
@@ -56,20 +60,22 @@ def test_fail_on_missing_tolerance():
         "provider": {
             "type": "python",
             "module": "chaosaddons.controls.safeguards",
-            "arguments": [
-                {
-                    "name": "my probe",
-                    "type": "probe",
-                    "provider": {
-                        "type": "python",
-                        "module": "os.path",
-                        "func": "exists",
-                        "arguments": {
-                            "path": "/tmp"
+            "arguments": {
+                "probes": [
+                    {
+                        "name": "my probe",
+                        "type": "probe",
+                        "provider": {
+                            "type": "python",
+                            "module": "os.path",
+                            "func": "exists",
+                            "arguments": {
+                                "path": "/tmp"
+                            }
                         }
                     }
-                }
-            ]
+                ]
+            }
         }
     }
     with pytest.raises(InvalidActivity) as x:
@@ -78,12 +84,20 @@ def test_fail_on_missing_tolerance():
 
 def test_fail_when_no_probes_were_given():
     invalid_python_func_probe = {
-        "name": "my control",
         "provider": {
-            "type": "python",
-            "module": "chaosaddons.controls.safeguards",
-            "arguments": [
-            ]
+            "arguments": {
+                "probes": [
+                    {
+                        "name": "my control",
+                        "provider": {
+                            "type": "python",
+                            "module": "chaosaddons.controls.safeguards",
+                            "arguments": [
+                            ]
+                        }
+                    }
+                ]
+            }
         }
     }
     with pytest.raises(InvalidActivity) as x:
