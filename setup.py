@@ -5,5 +5,5 @@ if __name__ == '__main__':
     setup(
         use_scm_version=True,
         name="chaostoolkit-addons",
-        version="0.2.0",
+        version="0.4.0",
     )
