@@ -163,17 +163,17 @@ class Guardian(threading.local):
             f = None
             if p.get("frequency"):
                 f = self.repeating.submit(
-                    run_repeatedly, experiment=experiment,
+                    run_repeatedly, guard=self, experiment=experiment,
                     probe=p, configuration=configuration,
                     secrets=secrets, stop_repeating=self.repeating_until)
             elif p.get("background"):
                 f = self.once.submit(
-                    run_soon, experiment=experiment,
+                    run_soon, guard=self, experiment=experiment,
                     probe=p, configuration=configuration,
                     secrets=secrets)
             else:
                 f = self.now.submit(
-                    run_now, experiment=experiment,
+                    run_now, guard=self, experiment=experiment,
                     probe=p, configuration=configuration,
                     secrets=secrets, done=self.now_all_done)
 
@@ -238,7 +238,7 @@ def after_experiment_control(**kwargs):
 ###############################################################################
 # Internals
 ###############################################################################
-def run_repeatedly(experiment: Experiment, probe: Probe,
+def run_repeatedly(guard: Guardian, experiment: Experiment, probe: Probe,
                    configuration: Configuration, secrets: Secrets,
                    stop_repeating: threading.Event) -> None:
     wait_for = probe.get("frequency")
@@ -249,19 +249,20 @@ def run_repeatedly(experiment: Experiment, probe: Probe,
         stop_repeating.wait(timeout=wait_for)
         if not stop_repeating.is_set():
             interrupt_experiment_on_unhealthy_probe(
-                probe, run, configuration, secrets)
+                guard, probe, run, configuration, secrets)
 
 
-def run_soon(experiment: Experiment, probe: Probe,
+def run_soon(guard: Guardian, experiment: Experiment, probe: Probe,
              configuration: Configuration,
              secrets: Secrets) -> None:
     run = execute_activity(
         experiment=experiment, probe=probe,
         configuration=configuration, secrets=secrets)
-    interrupt_experiment_on_unhealthy_probe(probe, run, configuration, secrets)
+    interrupt_experiment_on_unhealthy_probe(
+        guard, probe, run, configuration, secrets)
 
 
-def run_now(experiment: Experiment, probe: Probe,
+def run_now(guard: Guardian, experiment: Experiment, probe: Probe,
             configuration: Configuration,
             secrets: Secrets, done: threading.Barrier) -> None:
     try:
@@ -271,10 +272,12 @@ def run_now(experiment: Experiment, probe: Probe,
     finally:
         done.wait()
 
-    interrupt_experiment_on_unhealthy_probe(probe, run, configuration, secrets)
+    interrupt_experiment_on_unhealthy_probe(
+        guard, probe, run, configuration, secrets)
 
 
-def interrupt_experiment_on_unhealthy_probe(probe: Probe, run: Run,
+def interrupt_experiment_on_unhealthy_probe(guard: Guardian, probe: Probe,
+                                            run: Run,
                                             configuration: Configuration,
                                             secrets=Secrets) -> None:
     if experiment_finished.is_set():
@@ -284,8 +287,8 @@ def interrupt_experiment_on_unhealthy_probe(probe: Probe, run: Run,
     checked = within_tolerance(
         tolerance, run["output"], configuration=configuration,
         secrets=secrets)
-    if not checked and not guardian.interrupted:
-        guardian.interrupted = True
+    if not checked and not guard.interrupted:
+        guard.interrupted = True
         if not experiment_finished.is_set():
             logger.critical(
                 "Safeguard '{}' triggered the end of the experiment".format(

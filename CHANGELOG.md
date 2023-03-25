@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.5.0...HEAD
+
+## [0.5.0][]
+
+[0.5.0]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.4.0...0.5.0
+
+### Changed
+
+- Allow for callback to use their own guardian instance in the safeguard control
 
 ## [0.4.0][]
 
