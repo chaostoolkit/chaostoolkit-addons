@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.5.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.6.0...HEAD
+
+## [0.6.0][]
+
+[0.6.0]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.5.0...0.6.0
+
+### Changed
+
+- No need for the safeguard Guardian class to be a thread-local
 
 ## [0.5.0][]
 

@@ -106,7 +106,7 @@ __all__ = ["configure_control", "before_experiment_control",
            "after_experiment_control", "validate_control"]
 
 
-class Guardian(threading.local):
+class Guardian:
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._interrupted = False
