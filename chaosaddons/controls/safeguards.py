@@ -110,6 +110,7 @@ class Guardian:
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._interrupted = False
+        self._setup = False
 
     @property
     def interrupted(self) -> bool:
@@ -148,6 +149,7 @@ class Guardian:
         self.now = ThreadPoolExecutor(max_workers=now_count or 1)
         self.once = ThreadPoolExecutor(max_workers=once_count or 1)
         self.repeating = ThreadPoolExecutor(max_workers=repeating_count or 1)
+        self._setup = True
 
     def run(self, experiment: Experiment, probes: List[Probe],
             configuration: Configuration, secrets: Secrets,
@@ -201,6 +203,9 @@ class Guardian:
         """
         Stop the guardian and all its safeguards.
         """
+        if not self._setup:
+            return None
+
         self.repeating_until.set()
         self.now.shutdown(wait=True)
         self.repeating.shutdown(wait=True)
