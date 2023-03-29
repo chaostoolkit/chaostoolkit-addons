@@ -151,7 +151,7 @@ class Guardian:
         self.now = ThreadPoolExecutor(max_workers=now_count or 1)
         self.once = ThreadPoolExecutor(max_workers=once_count or 1)
         self.repeating = ThreadPoolExecutor(max_workers=repeating_count or 1)
-        self.interrupter = ThreadPoolExecutor(max_workers=1)
+        self.interrupter = threading.Thread(None, self._wait_interruption)
         self._setup = True
 
     def run(self, experiment: Experiment, probes: List[Probe],
@@ -164,7 +164,8 @@ class Guardian:
         or not), then this call blocks until all these pre-check safeguards
         are completed.
         """
-        self.interrupter.submit(self._wait_interruption)
+        self.interrupter.start()
+
         for p in probes:
             f = None
             if p.get("frequency"):

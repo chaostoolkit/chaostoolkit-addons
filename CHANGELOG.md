@@ -2,7 +2,16 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.1...HEAD
+
+## [0.8.1][]
+
+[0.8.1]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.0...0.8.1
+
+### Changed
+
+- Switched to regular thread to check if must interrupted as the future
+  executor is bit painful when it comes to exiting the program
 
 ## [0.8.0][]
 
