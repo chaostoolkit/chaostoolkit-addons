@@ -2,7 +2,16 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.0...HEAD
+
+## [0.8.0][]
+
+[0.8.0]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.7.0...0.8.0
+
+### Changed
+
+- Reworked how we trigger the actual exit call so that we never block the
+  threads playing the safeguards. Now only one thread can trigger the exit.
 
 ## [0.7.0][]
 
