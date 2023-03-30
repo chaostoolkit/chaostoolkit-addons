@@ -200,12 +200,16 @@ class Guardian:
     def _wait_interruption(self) -> None:
         self.wait_for_interruption.wait()
 
+        # cannot interrupt if already finished
+        if experiment_finished.is_set():
+            return None
+
         if not self.triggered_by:
             return None
 
-        if not self.interrupted:
-            self.interrupted = True
-            if not experiment_finished.is_set():
+        with self._lock:
+            if not self._interrupted:
+                self._interrupted = True
                 logger.critical(
                     "Safeguard '{}' triggered the end of the experiment".format(
                         self.triggered_by))

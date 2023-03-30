@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.2...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.3...HEAD
+
+## [0.8.3][]
+
+[0.8.3]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.2...0.8.3
+
+### Changed
+
+- Better management of ending the experiment
 
 ## [0.8.2][]
 
