@@ -209,7 +209,10 @@ class Guardian:
                 logger.critical(
                     "Safeguard '{}' triggered the end of the experiment".format(
                         self.triggered_by))
-                exit_gracefully()
+                self._exit()
+
+    def _exit(self) -> None:
+        exit_gracefully()
 
     def _log_finished(self, f: Future, probe: Probe) -> None:
         """

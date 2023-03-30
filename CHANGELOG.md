@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.1...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.2...HEAD
+
+## [0.8.2][]
+
+[0.8.2]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.1...0.8.2
+
+### Changed
+
+- Indirection to the exeit function so we can override in tests
 
 ## [0.8.1][]
 
