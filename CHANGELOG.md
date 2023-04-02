@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.3...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.4...HEAD
+
+## [0.8.4][]
+
+[0.8.4]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.3...0.8.4
+
+### Changed
+
+- `cancel_futures` is only support in Python 3.9+
 
 ## [0.8.3][]
 

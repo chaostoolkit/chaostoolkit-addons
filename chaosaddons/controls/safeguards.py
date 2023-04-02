@@ -82,6 +82,7 @@ calls for too long.
 from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime
 from functools import partial
+import sys
 import threading
 import time
 import traceback
@@ -240,9 +241,16 @@ class Guardian:
 
         self.wait_for_interruption.set()
         self.repeating_until.set()
-        self.now.shutdown(wait=False, cancel_futures=False)
-        self.repeating.shutdown(wait=False, cancel_futures=False)
-        self.once.shutdown(wait=False, cancel_futures=False)
+
+        if sys.version_info >= (3, 9):
+            self.now.shutdown(wait=True, cancel_futures=True)
+            self.repeating.shutdown(wait=True, cancel_futures=True)
+            self.once.shutdown(wait=True, cancel_futures=True)
+        else:
+            self.now.shutdown(wait=True)
+            self.repeating.shutdown(wait=True)
+            self.once.shutdown(wait=True)
+
         logger.debug("Guardian is now terminated")
 
 
