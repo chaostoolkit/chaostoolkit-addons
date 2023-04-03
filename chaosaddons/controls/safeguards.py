@@ -80,6 +80,7 @@ and therefore blocking the process. Make sure your probe do not make blocking
 calls for too long.
 """
 from concurrent.futures import Future, ThreadPoolExecutor
+from copy import deepcopy
 from datetime import datetime
 from functools import partial
 import sys
@@ -113,6 +114,8 @@ class Guardian:
         self._interrupted = False
         self._setup = False
         self.triggered_by = None
+        self.triggered_by_run = None
+        self.was_triggered = False
 
     @property
     def interrupted(self) -> bool:
@@ -192,9 +195,11 @@ class Guardian:
         # this allows the experiment to block until these are passed
         self.now_all_done.wait()
 
-    def interrupt_now(self, triggered_by: str) -> None:
+    def interrupt_now(self, triggered_by: str, run: Run) -> None:
         with self._lock:
             self.triggered_by = triggered_by
+            self.triggered_by_run = deepcopy(run)
+            self.was_triggered = True
 
         self.wait_for_interruption.set()
 
@@ -205,7 +210,7 @@ class Guardian:
         if experiment_finished.is_set():
             return None
 
-        if not self.triggered_by:
+        if not self.was_triggered:
             return None
 
         with self._lock:
@@ -335,7 +340,7 @@ def interrupt_experiment_on_unhealthy_probe(guard: Guardian, probe: Probe,
         tolerance, run["output"], configuration=configuration,
         secrets=secrets)
     if not checked:
-        guard.interrupt_now(probe["name"])
+        guard.interrupt_now(probe["name"], run)
 
 
 def execute_activity(experiment: Experiment, probe: Probe,
