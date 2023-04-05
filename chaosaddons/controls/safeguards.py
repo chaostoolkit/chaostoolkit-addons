@@ -213,13 +213,17 @@ class Guardian:
         if not self.was_triggered:
             return None
 
+        do_exit = False
         with self._lock:
             if not self._interrupted:
                 self._interrupted = True
                 logger.critical(
                     "Safeguard '{}' triggered the end of the experiment".format(
                         self.triggered_by))
-                self._exit()
+                do_exit = True
+
+        if do_exit:
+            self._exit()
 
     def _exit(self) -> None:
         exit_gracefully()
