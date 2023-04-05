@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.5...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.6...HEAD
+
+## [0.8.6][]
+
+[0.8.6]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.5...0.8.6
+
+### Changed
+
+* Try to not block on exit
 
 ## [0.8.5][]
 
