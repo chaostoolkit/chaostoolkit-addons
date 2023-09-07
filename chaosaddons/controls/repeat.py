@@ -47,6 +47,11 @@ def after_activity_control(context: Activity, experiment: Experiment,
     Note, if `repeat_count` is less than 2, then this is a noop.
     """
     activity = context
+
+    # prevent endless looping
+    if "iteration_index" in activity:
+        return None
+
     activity_name = activity["name"]
     activity_type = activity["type"]
 
@@ -58,6 +63,9 @@ def after_activity_control(context: Activity, experiment: Experiment,
         )
         return None
 
+    logger.debug(
+        f"Repeat {activity_type} '{activity_name}' {repeat_count} more times"
+    )
     last_status = state.get("status")
 
     if break_if_previous_iteration_failed and last_status != "succeeded":
@@ -89,16 +97,12 @@ def repeat_activity(activity: Activity, activities: List[Activity],
         return
 
     activity_name = activity["name"]
+    copy_activities = activities[:]
 
-    for a in reversed(activities):
+    for pos, a in enumerate(copy_activities):
         if a["name"] == activity_name:
-            activity = deepcopy(activity)
-            if "iteration_index" not in activity:
-                activity["iteration_index"] = 1
-            else:
-                if activity["iteration_index"] == repeat_count:
-                    return
-                activity["iteration_index"] += 1
-
-            activities.append(activity)
+            for index in range(1, repeat_count+1):
+                new_activity = deepcopy(activity)
+                new_activity["iteration_index"] = index
+                activities.insert(pos+index, new_activity)
             break

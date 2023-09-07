@@ -7,6 +7,8 @@
 ### Fixed
 
 * Make sure the `repeat` control doesn't run when it count is less than 2
+* Prevent endless looping
+* Ensure insertion ordering is correct
 
 ### Changed
 
