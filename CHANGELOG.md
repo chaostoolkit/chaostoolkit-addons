@@ -4,6 +4,10 @@
 
 [Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.6...HEAD
 
+### Changed
+
+- Switched to ruff to lint the code
+
 ## [0.8.6][]
 
 [0.8.6]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.5...0.8.6

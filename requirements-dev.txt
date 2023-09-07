@@ -2,5 +2,5 @@ coverage
 pytest
 pytest-cov
 pytest-sugar
-pylama
 importlib-metadata>=1.2.0; python_version < '3.8'
+ruff
