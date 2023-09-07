@@ -43,10 +43,21 @@ def after_activity_control(context: Activity, experiment: Experiment,
     You may set `break_if_previous_iteration_failed` to stop iterating if
     an activity failed to run. Note it's not about the return value of
     the activity but if it actually executed as planned.
+
+    Note, if `repeat_count` is less than 2, then this is a noop.
     """
     activity = context
     activity_name = activity["name"]
+    activity_type = activity["type"]
+
     repeat_count = repeat_count - 1
+    if repeat_count <= 0:
+        logger.debug(
+            f"Do not repeat {activity_type} '{activity_name}' when "
+            "`repeat_count` is less than 2"
+        )
+        return None
+
     last_status = state.get("status")
 
     if break_if_previous_iteration_failed and last_status != "succeeded":

@@ -4,6 +4,10 @@
 
 [Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.8.6...HEAD
 
+### Fixed
+
+* Make sure the `repeat` control doesn't run when it count is less than 2
+
 ### Changed
 
 - Switched to ruff to lint the code
