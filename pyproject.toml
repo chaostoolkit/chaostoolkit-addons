@@ -39,7 +39,7 @@ requires = [
 ]
 build-backend = "pdm.backend"
 
-[project.optional-dependencies]
+[tool.pdm.dev-dependencies]
 dev = [
     "pytest-cov>=4.1.0",
     "pytest>=8.1.1",
