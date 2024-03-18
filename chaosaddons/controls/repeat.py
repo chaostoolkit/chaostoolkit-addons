@@ -2,16 +2,19 @@ import logging
 from copy import deepcopy
 from typing import List
 
-from chaoslib.types import Activity, Experiment,  Run
+from chaoslib.types import Activity, Experiment, Run
 
 __all__ = ["after_activity_control"]
 logger = logging.getLogger("chaostoolkit")
 
 
-def after_activity_control(context: Activity, experiment: Experiment,
-                           state: Run, repeat_count: int = 0,
-                           break_if_previous_iteration_failed: bool = False
-                           ) -> None:
+def after_activity_control(
+    context: Activity,
+    experiment: Experiment,
+    state: Run,
+    repeat_count: int = 0,
+    break_if_previous_iteration_failed: bool = False,
+) -> None:
     """
     Repeat the activity a certain number of times.
 
@@ -72,28 +75,28 @@ def after_activity_control(context: Activity, experiment: Experiment,
     if break_if_previous_iteration_failed and last_status != "succeeded":
         logger.debug(
             "Last iteration failed so stopping our iterations "
-            f"of '{activity_name}'")
+            f"of '{activity_name}'"
+        )
         return
 
-    hypothesis_activities = experiment.get(
-        "steady-state-hypothesis", {}).get("probes", [])
-    repeat_activity(
-        activity, hypothesis_activities, repeat_count=repeat_count)
+    hypothesis_activities = experiment.get("steady-state-hypothesis", {}).get(
+        "probes", []
+    )
+    repeat_activity(activity, hypothesis_activities, repeat_count=repeat_count)
 
     method_activities = experiment.get("method", [])
-    repeat_activity(
-        activity, method_activities, repeat_count=repeat_count)
+    repeat_activity(activity, method_activities, repeat_count=repeat_count)
 
     rollback_activities = experiment.get("rollbacks", [])
-    repeat_activity(
-        activity, rollback_activities, repeat_count=repeat_count)
+    repeat_activity(activity, rollback_activities, repeat_count=repeat_count)
 
 
 ###############################################################################
 # Internals
 ###############################################################################
-def repeat_activity(activity: Activity, activities: List[Activity],
-                    repeat_count: int = 0) -> None:
+def repeat_activity(
+    activity: Activity, activities: List[Activity], repeat_count: int = 0
+) -> None:
     if not activities:
         return
 
@@ -102,8 +105,8 @@ def repeat_activity(activity: Activity, activities: List[Activity],
 
     for pos, a in enumerate(copy_activities):
         if a["name"] == activity_name:
-            for index in range(1, repeat_count+1):
+            for index in range(1, repeat_count + 1):
                 new_activity = deepcopy(activity)
                 new_activity["iteration_index"] = index
-                activities.insert(pos+index, new_activity)
+                activities.insert(pos + index, new_activity)
             break

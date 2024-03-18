@@ -84,11 +84,9 @@ dev = [
     "coverage>=7.4.4",
     "pytest-sugar>=1.0.0",
     "ruff>=0.3.3",
-    "isort>=5.13.2",
-    "black>=24.3.0",
 ]
 
 [tool.pdm.scripts]
-lint = {composite = ["ruff check chaosaddons/", "isort --check-only --profile black chaosaddons/", "black --check --diff chaosaddons/"]}
-format = {composite = ["isort --profile black chaosaddons/", "black chaosaddons/", "ruff check chaosaddons/ --fix"]}
+lint = {composite = ["ruff check chaosaddons/"]}
+format = {composite = ["ruff format chaosaddons/"]}
 test = {cmd = "pytest"}

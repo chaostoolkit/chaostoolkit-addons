@@ -46,25 +46,33 @@ from typing import List
 from chaoslib.types import Activity
 
 
-__all__ = ["before_experiment_control", "before_activity_control",
-           "after_activity_control"]
+__all__ = [
+    "before_experiment_control",
+    "before_activity_control",
+    "after_activity_control",
+]
 logger = logging.getLogger("chaostoolkit")
 
 
-def before_experiment_control(target_type: str = None,
-                              target_names: List[str] = None, **kwargs):
+def before_experiment_control(
+    target_type: str = None, target_names: List[str] = None, **kwargs
+):
     if target_type:
         logger.warning(
             "No '{}' will be executed as configured by the bypass "
-            "control".format(target_type))
+            "control".format(target_type)
+        )
     if target_names:
         logger.warning(
             "The following activities will not be executed: {}".format(
-                ", ".join(target_names)))
+                ", ".join(target_names)
+            )
+        )
 
 
-def before_activity_control(context: Activity, target_type: str = None,
-                            target_names: List[str] = None):
+def before_activity_control(
+    context: Activity, target_type: str = None, target_names: List[str] = None
+):
     """
     Sets the `dry` property on the activity so it is not actually executed
     """
@@ -74,8 +82,9 @@ def before_activity_control(context: Activity, target_type: str = None,
         context["dry"] = True
 
 
-def after_activity_control(context: Activity, target_type: str = None,
-                           target_names: List[str] = None):
+def after_activity_control(
+    context: Activity, target_type: str = None, target_names: List[str] = None
+):
     """
     Removes the `dry` property that was previously set
     """

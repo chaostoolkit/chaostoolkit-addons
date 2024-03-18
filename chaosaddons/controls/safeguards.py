@@ -95,16 +95,29 @@ from chaoslib.caching import lookup_activity
 from chaoslib.control import controls
 from chaoslib.exceptions import ActivityFailed, InvalidActivity
 from chaoslib.exit import exit_gracefully
-from chaoslib.hypothesis import ensure_hypothesis_tolerance_is_valid, \
-    within_tolerance
-from chaoslib.types import Configuration, Control, \
-    Experiment, Probe, Run, Secrets, Settings
+from chaoslib.hypothesis import (
+    ensure_hypothesis_tolerance_is_valid,
+    within_tolerance,
+)
+from chaoslib.types import (
+    Configuration,
+    Control,
+    Experiment,
+    Probe,
+    Run,
+    Secrets,
+    Settings,
+)
 
 from .synchronization import experiment_finished
 
 
-__all__ = ["configure_control", "before_experiment_control",
-           "after_experiment_control", "validate_control"]
+__all__ = [
+    "configure_control",
+    "before_experiment_control",
+    "after_experiment_control",
+    "validate_control",
+]
 logger = logging.getLogger("chaostoolkit")
 
 
@@ -158,9 +171,14 @@ class Guardian:
         self.interrupter = threading.Thread(None, self._wait_interruption)
         self._setup = True
 
-    def run(self, experiment: Experiment, probes: List[Probe],
-            configuration: Configuration, secrets: Secrets,
-            settings: Settings) -> None:
+    def run(
+        self,
+        experiment: Experiment,
+        probes: List[Probe],
+        configuration: Configuration,
+        secrets: Secrets,
+        settings: Settings,
+    ) -> None:
         """
         Run the guardian safeguards in their own threads.
 
@@ -174,19 +192,33 @@ class Guardian:
             f = None
             if p.get("frequency"):
                 f = self.repeating.submit(
-                    run_repeatedly, guard=self, experiment=experiment,
-                    probe=p, configuration=configuration,
-                    secrets=secrets, stop_repeating=self.repeating_until)
+                    run_repeatedly,
+                    guard=self,
+                    experiment=experiment,
+                    probe=p,
+                    configuration=configuration,
+                    secrets=secrets,
+                    stop_repeating=self.repeating_until,
+                )
             elif p.get("background"):
                 f = self.once.submit(
-                    run_soon, guard=self, experiment=experiment,
-                    probe=p, configuration=configuration,
-                    secrets=secrets)
+                    run_soon,
+                    guard=self,
+                    experiment=experiment,
+                    probe=p,
+                    configuration=configuration,
+                    secrets=secrets,
+                )
             else:
                 f = self.now.submit(
-                    run_now, guard=self, experiment=experiment,
-                    probe=p, configuration=configuration,
-                    secrets=secrets, done=self.now_all_done)
+                    run_now,
+                    guard=self,
+                    experiment=experiment,
+                    probe=p,
+                    configuration=configuration,
+                    secrets=secrets,
+                    done=self.now_all_done,
+                )
 
             if f is not None:
                 f.add_done_callback(partial(self._log_finished, probe=p))
@@ -219,7 +251,9 @@ class Guardian:
                 self._interrupted = True
                 logger.critical(
                     "Safeguard '{}' triggered the end of the experiment".format(
-                        self.triggered_by))
+                        self.triggered_by
+                    )
+                )
                 do_exit = True
 
         if do_exit:
@@ -236,8 +270,8 @@ class Guardian:
         x = f.exception()
         if x is not None:
             logger.debug(
-                "Safeguard '{}' failed: {}".format(
-                    name, str(x)), exc_info=x)
+                "Safeguard '{}' failed: {}".format(name, str(x)), exc_info=x
+            )
         else:
             logger.debug("Safeguard '{}' finished normally".format(name))
 
@@ -271,19 +305,24 @@ def validate_control(control: Control) -> None:
     validate_probes(probes)
 
 
-def configure_control(configuration: Configuration = None,
-                      secrets: Secrets = None, settings: Settings = None,
-                      experiment: Experiment = None,
-                      probes: List[Probe] = None) -> None:
+def configure_control(
+    configuration: Configuration = None,
+    secrets: Secrets = None,
+    settings: Settings = None,
+    experiment: Experiment = None,
+    probes: List[Probe] = None,
+) -> None:
     guardian.prepare(probes)
 
 
-def before_experiment_control(context: str,
-                              configuration: Configuration = None,
-                              secrets: Secrets = None,
-                              settings: Settings = None,
-                              experiment: Experiment = None,
-                              probes: List[Probe] = None) -> None:
+def before_experiment_control(
+    context: str,
+    configuration: Configuration = None,
+    secrets: Secrets = None,
+    settings: Settings = None,
+    experiment: Experiment = None,
+    probes: List[Probe] = None,
+) -> None:
     guardian.run(experiment, probes, configuration, secrets, settings)
 
 
@@ -294,61 +333,94 @@ def after_experiment_control(**kwargs):
 ###############################################################################
 # Internals
 ###############################################################################
-def run_repeatedly(guard: Guardian, experiment: Experiment, probe: Probe,
-                   configuration: Configuration, secrets: Secrets,
-                   stop_repeating: threading.Event) -> None:
+def run_repeatedly(
+    guard: Guardian,
+    experiment: Experiment,
+    probe: Probe,
+    configuration: Configuration,
+    secrets: Secrets,
+    stop_repeating: threading.Event,
+) -> None:
     wait_for = probe.get("frequency")
     while not stop_repeating.is_set():
         run = execute_activity(
-            experiment=experiment, probe=probe,
-            configuration=configuration, secrets=secrets)
+            experiment=experiment,
+            probe=probe,
+            configuration=configuration,
+            secrets=secrets,
+        )
         stop_repeating.wait(timeout=wait_for)
         if not stop_repeating.is_set():
             interrupt_experiment_on_unhealthy_probe(
-                guard, probe, run, configuration, secrets)
+                guard, probe, run, configuration, secrets
+            )
 
 
-def run_soon(guard: Guardian, experiment: Experiment, probe: Probe,
-             configuration: Configuration,
-             secrets: Secrets) -> None:
+def run_soon(
+    guard: Guardian,
+    experiment: Experiment,
+    probe: Probe,
+    configuration: Configuration,
+    secrets: Secrets,
+) -> None:
     run = execute_activity(
-        experiment=experiment, probe=probe,
-        configuration=configuration, secrets=secrets)
+        experiment=experiment,
+        probe=probe,
+        configuration=configuration,
+        secrets=secrets,
+    )
     interrupt_experiment_on_unhealthy_probe(
-        guard, probe, run, configuration, secrets)
+        guard, probe, run, configuration, secrets
+    )
 
 
-def run_now(guard: Guardian, experiment: Experiment, probe: Probe,
-            configuration: Configuration,
-            secrets: Secrets, done: threading.Barrier) -> None:
+def run_now(
+    guard: Guardian,
+    experiment: Experiment,
+    probe: Probe,
+    configuration: Configuration,
+    secrets: Secrets,
+    done: threading.Barrier,
+) -> None:
     try:
         run = execute_activity(
-            experiment=experiment, probe=probe,
-            configuration=configuration, secrets=secrets)
+            experiment=experiment,
+            probe=probe,
+            configuration=configuration,
+            secrets=secrets,
+        )
     finally:
         done.wait()
 
     interrupt_experiment_on_unhealthy_probe(
-        guard, probe, run, configuration, secrets)
+        guard, probe, run, configuration, secrets
+    )
 
 
-def interrupt_experiment_on_unhealthy_probe(guard: Guardian, probe: Probe,
-                                            run: Run,
-                                            configuration: Configuration,
-                                            secrets=Secrets) -> None:
+def interrupt_experiment_on_unhealthy_probe(
+    guard: Guardian,
+    probe: Probe,
+    run: Run,
+    configuration: Configuration,
+    secrets=Secrets,
+) -> None:
     if experiment_finished.is_set():
         return
 
     tolerance = probe.get("tolerance")
     checked = within_tolerance(
-        tolerance, run["output"], configuration=configuration,
-        secrets=secrets)
+        tolerance, run["output"], configuration=configuration, secrets=secrets
+    )
     if not checked:
         guard.interrupt_now(probe["name"], run)
 
 
-def execute_activity(experiment: Experiment, probe: Probe,
-                     configuration: Configuration, secrets: Secrets) -> Run:
+def execute_activity(
+    experiment: Experiment,
+    probe: Probe,
+    configuration: Configuration,
+    secrets: Secrets,
+) -> Run:
     """
     Low-level wrapper around the actual activity provider call to collect
     some meta data (like duration, start/end time, exceptions...) during
@@ -359,10 +431,16 @@ def execute_activity(experiment: Experiment, probe: Probe,
         probe = lookup_activity(ref)
         if not probe:
             raise ActivityFailed(
-                "could not find referenced activity '{r}'".format(r=ref))
+                "could not find referenced activity '{r}'".format(r=ref)
+            )
 
-    with controls(level="activity", experiment=experiment, context=probe,
-                  configuration=configuration, secrets=secrets) as control:
+    with controls(
+        level="activity",
+        experiment=experiment,
+        context=probe,
+        configuration=configuration,
+        secrets=secrets,
+    ) as control:
         pauses = probe.get("pauses", {})
         pause_before = pauses.get("before")
         if pause_before:
@@ -370,10 +448,7 @@ def execute_activity(experiment: Experiment, probe: Probe,
 
         start = datetime.utcnow()
 
-        run = {
-            "activity": probe.copy(),
-            "output": None
-        }
+        run = {"activity": probe.copy(), "output": None}
 
         result = None
         try:
@@ -413,11 +488,13 @@ def validate_probes(probes: List[Probe]):
         if probe["type"] != "probe":
             raise InvalidActivity(
                 "safeguard control '{}' should be of type 'probe' "
-                "not '{}'".format(probe['name'], probe['type']))
+                "not '{}'".format(probe["name"], probe["type"])
+            )
 
         if "tolerance" not in probe:
             raise InvalidActivity(
                 "safeguard control is invalid as the probe '{}' is "
-                "missing a tolerance property".format(probe['name']))
+                "missing a tolerance property".format(probe["name"])
+            )
 
         ensure_hypothesis_tolerance_is_valid(probe["tolerance"])
