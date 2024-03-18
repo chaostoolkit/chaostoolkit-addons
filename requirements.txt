@@ -1,1 +1,1 @@
-chaostoolkit-lib>=1.15.0
+chaostoolkit-lib>=1.42

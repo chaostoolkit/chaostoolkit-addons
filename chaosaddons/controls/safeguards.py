@@ -79,6 +79,7 @@ means that while the experiment has ended, your probe could be not returning
 and therefore blocking the process. Make sure your probe do not make blocking
 calls for too long.
 """
+import logging
 from concurrent.futures import Future, ThreadPoolExecutor
 from copy import deepcopy
 from datetime import datetime
@@ -88,8 +89,6 @@ import threading
 import time
 import traceback
 from typing import List
-
-from logzero import logger
 
 from chaoslib.activity import ensure_activity_is_valid, run_activity
 from chaoslib.caching import lookup_activity
@@ -106,6 +105,7 @@ from .synchronization import experiment_finished
 
 __all__ = ["configure_control", "before_experiment_control",
            "after_experiment_control", "validate_control"]
+logger = logging.getLogger("chaostoolkit")
 
 
 class Guardian:

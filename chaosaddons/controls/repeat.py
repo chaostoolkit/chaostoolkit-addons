@@ -1,10 +1,11 @@
+import logging
 from copy import deepcopy
 from typing import List
 
 from chaoslib.types import Activity, Experiment,  Run
-from logzero import logger
 
 __all__ = ["after_activity_control"]
+logger = logging.getLogger("chaostoolkit")
 
 
 def after_activity_control(context: Activity, experiment: Experiment,

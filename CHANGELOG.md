@@ -2,7 +2,18 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.9.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.10.0...HEAD
+
+## [0.10.0][]
+
+[0.10.0]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.9.0...0.10.0
+
+### Changed
+
+* Bump to chaostoolkit-lib 1.42.1 to drop logzero
+* Drop logzero expectation
+* Drop support Python 3.7
+* Build for Python 3.12
 
 ## [0.9.0][]
 

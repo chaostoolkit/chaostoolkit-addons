@@ -40,14 +40,15 @@ For instance, to bypass the execution of all actions in the experiment:
     ],
 ```
 """
+import logging
 from typing import List
 
 from chaoslib.types import Activity
-from logzero import logger
 
 
 __all__ = ["before_experiment_control", "before_activity_control",
            "after_activity_control"]
+logger = logging.getLogger("chaostoolkit")
 
 
 def before_experiment_control(target_type: str = None,
