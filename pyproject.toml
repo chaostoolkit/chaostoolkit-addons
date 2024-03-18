@@ -39,19 +39,7 @@ requires = [
 ]
 build-backend = "pdm.backend"
 
-[tool.pdm.dev-dependencies]
-dev = [
-    "pytest-cov>=4.1.0",
-    "pytest>=8.1.1",
-    "coverage>=7.4.4",
-    "pytest-sugar>=1.0.0",
-    "ruff>=0.3.3",
-]
-
 [tool]
-
-[tool.pdm]
-version = { source = "scm" }
 
 [tool.black]
 color = true
@@ -85,6 +73,20 @@ combine_as_imports = true
 minversion = "6.0"
 testpaths = ["tests"]
 addopts = "-v -rxs --cov chaosaddons --cov-report term-missing:skip-covered -p no:warnings"
+
+
+[tool.pdm]
+version = { source = "scm" }
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest-cov>=4.1.0",
+    "pytest>=8.1.1",
+    "coverage>=7.4.4",
+    "pytest-sugar>=1.0.0",
+    "ruff>=0.3.3",
+    "isort>=5.13.2",
+    "black>=24.3.0",
+]
 
 [tool.pdm.scripts]
 lint = {composite = ["ruff check chaosaddons/", "isort --check-only --profile black chaosaddons/", "black --check --diff chaosaddons/"]}
