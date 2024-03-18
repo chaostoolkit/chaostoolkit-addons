@@ -5,7 +5,7 @@ or controls that can benefit the community.
 
 ## Install
 
-This package requires Python 3.7+
+This package requires Python 3.8+
 
 To be used from your experiment, this package must be installed in the Python
 environment where [chaostoolkit][] already lives.

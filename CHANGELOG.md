@@ -2,7 +2,16 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.10.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.11.0...HEAD
+
+## [0.11.0][]
+
+[0.11.0]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.10.0...0.11.0
+
+### Changed
+
+* Switched to PDM
+* Switched to trusted publisher from pypi
 
 ## [0.10.0][]
 
