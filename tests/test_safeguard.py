@@ -102,3 +102,23 @@ def test_fail_when_no_probes_were_given():
     }
     with pytest.raises(InvalidActivity) as x:
         validate_control(invalid_python_func_probe)
+
+
+def test_journal_records_the_triggering_safeguard():
+    from chaosaddons.controls import safeguards
+
+    guardian = safeguards.guardian
+    guardian.prepare([])
+    try:
+        run = {"activity": {"name": "sg"}, "status": "succeeded", "output": 1}
+        guardian.interrupt_now("sg", run)
+        journal = {}
+        safeguards.after_experiment_control(context={}, state=journal)
+        assert journal["safeguards"] == {"triggered_by": "sg", "run": run}
+    finally:
+        guardian.prepare([])
+        guardian.terminate()
+
+    journal = {}
+    safeguards.after_experiment_control(context={}, state=journal)
+    assert "safeguards" not in journal
