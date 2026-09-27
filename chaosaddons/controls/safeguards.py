@@ -65,7 +65,15 @@ seconds.
 
 If either of them doesn't meet its tolerance, the entire execution will
 terminate as soon as possible and leave the status of the experiment to
-`interrupted`.
+`interrupted`. The journal then records the safeguard that triggered the
+interruption, and its run, under `safeguards`:
+
+```json
+"safeguards": {
+    "triggered_by": "safeguard_3",
+    "run": {"activity": {...}, "status": "succeeded", "output": ...}
+}
+```
 
 Probes that do not declare the `background` or `frequency` properties are meant
 to run before the experiment really starts and will block until they are all
@@ -103,6 +111,7 @@ from chaoslib.types import (
     Configuration,
     Control,
     Experiment,
+    Journal,
     Probe,
     Run,
     Secrets,
@@ -151,6 +160,12 @@ class Guardian:
         Configure the guardian so that it runs with the right amount of
         resources.
         """
+        with self._lock:
+            self._interrupted = False
+            self.triggered_by = None
+            self.triggered_by_run = None
+            self.was_triggered = False
+
         once_count = 0
         repeating_count = 0
         now_count = 0
@@ -326,8 +341,19 @@ def before_experiment_control(
     guardian.run(experiment, probes, configuration, secrets, settings)
 
 
-def after_experiment_control(**kwargs):
+def after_experiment_control(
+    context: Experiment = None, state: Journal = None, **kwargs
+) -> None:
+    """
+    Stop the safeguards. When one of them interrupted the execution, record
+    which one and its run in the journal under `safeguards`.
+    """
     guardian.terminate()
+    if guardian.was_triggered and isinstance(state, dict):
+        state["safeguards"] = {
+            "triggered_by": guardian.triggered_by,
+            "run": guardian.triggered_by_run,
+        }
 
 
 ###############################################################################

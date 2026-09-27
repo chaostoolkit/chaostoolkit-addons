@@ -4,12 +4,22 @@
 
 [Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.11.0...HEAD
 
+### Added
+
+* The safeguards control records the safeguard that interrupted the
+  execution, and its run, in the journal under `safeguards`
+
 ### Changed
 
 * Requires Python 3.12+
 * Build against Python 3.12, 3.13 and 3.14 and refresh the lock file
 * Pin the linting rules to ruff's former defaults
 * Use supported versions of the checkout and artifact GitHub actions
+
+### Fixed
+
+* The safeguards control resets its triggered state when configured so a
+  previous execution in the same process does not leak into the next one
 
 ## [0.11.0][]
 
