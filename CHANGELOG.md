@@ -2,7 +2,11 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.11.0...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.12.0...HEAD
+
+## [0.12.0][]
+
+[0.12.0]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.11.0...0.12.0
 
 ### Added
 
