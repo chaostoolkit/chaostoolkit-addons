@@ -13,11 +13,11 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Set up PDM
       uses: pdm-project/setup-pdm@v4
       with:
-        python-version: "3.8"
+        python-version: "3.12"
     - name: Build wheels
       run: pdm build --no-sdist
       env:
@@ -25,7 +25,7 @@ jobs:
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
     - name: Upload packages as artifacts
-      uses: actions/upload-artifact@v2-preview
+      uses: actions/upload-artifact@v4
       with:
         name: chaostoolkit-addons-packages
         path: dist/chaostoolkit_addons-*
@@ -50,7 +50,7 @@ jobs:
       - release-to-pypi
     steps:
       - name: Download pypi artifacts
-        uses: actions/download-artifact@v2-preview
+        uses: actions/download-artifact@v4
         with:
           name: chaostoolkit-addons-packages
           path: dist

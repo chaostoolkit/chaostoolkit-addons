@@ -4,6 +4,13 @@
 
 [Unreleased]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.11.0...HEAD
 
+### Changed
+
+* Requires Python 3.12+
+* Build against Python 3.12, 3.13 and 3.14 and refresh the lock file
+* Pin the linting rules to ruff's former defaults
+* Use supported versions of the checkout and artifact GitHub actions
+
 ## [0.11.0][]
 
 [0.11.0]: https://github.com/chaostoolkit/chaostoolkit-addons/compare/0.10.0...0.11.0
